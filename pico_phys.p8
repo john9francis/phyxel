@@ -91,18 +91,18 @@ function get_phys_grid(x,y)
      -- handle boundaries
      -- at i=1, i=#g_g
      -- at j=1, j=#g_g[i]
-     local x_init = x-1
-     local x_final = x+1
-     local y_init = y-1
-     local y_final = y+1
+     local i_init = i-1
+     local i_final = i+1
+     local j_init = j-1
+     local j_final = j+1
      
-     if i==1 then x_init = x end
-     if i==#gradient_grid then x_final = x end
-     if j==1 then y_init = y end
-     if j==#gradient_grid[i] then y_final = y end
+     if i==1 then i_init = i end
+     if i==#gradient_grid then i_final = i end
+     if j==1 then j_init = j end
+     if j==#gradient_grid[i] then j_final = j end
      
-     diffx = energy_grid[x_final][y] - energy_grid[x_init][y] 
-  		 diffy = energy_grid[x][y_final] - energy_grid[x][y_init]
+     diffx = energy_grid[i_final][j] - energy_grid[i_init][j] 
+  		 diffy = energy_grid[i][j_final] - energy_grid[i][j_init]
   			
      gradient_grid[i][j] = vec2(diffx, diffy)
     end
@@ -113,6 +113,8 @@ end
 
 
 pg = get_phys_grid(3, 3)
+pg.add_energy(1,2,3)
+pg.update()
 pg.print_grids()
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
