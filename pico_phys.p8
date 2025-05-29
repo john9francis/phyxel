@@ -101,6 +101,21 @@ function get_phys_grid(x,y)
    end
   end,
   
+  reset_grid = function()
+   for i=1,#energy_grid do
+    for j=1,#energy_grid[i] do
+     energy_grid[i][j] = 0
+    end
+   end
+   
+   for i=1,#gradient_grid do
+    for j=1,#gradient_grid[i] do
+     gradient_grid[i][j].x = 0
+     gradient_grid[i][j].y = 0
+    end
+   end
+  end,
+  
   update = function()
    -- first, get gradient_grid
    -- via finite difference
@@ -133,13 +148,64 @@ function get_phys_grid(x,y)
  }
 end
 
+function test()
+ pg = get_phys_grid(3, 3)
+ pg.add_energy(1,2,3)
+ pg.update()
+ frc_vec = pg.get_force_vec(2,2)
+ print("frc: ("..frc_vec.x..","..frc_vec.y..")", 10, 100)
 
-pg = get_phys_grid(3, 3)
-pg.add_energy(1,2,3)
-pg.update()
-frc_vec = pg.get_force_vec(2,2)
-print("frc: ("..frc_vec.x..","..frc_vec.y..")", 10, 100)
-pg.print_grids()
+
+ pg2 = get_phys_grid(3, 3) 
+ pg2.add_energy(3,3,3)
+ pg2.update()
+ frc_vec2 = pg.get_force_vec(2,2)
+ print("frc: ("..frc_vec2.x..","..frc_vec.y..")", 10, 100)
+ pg2.print_grids()
+end
+-->8
+-- test --
+
+function phys_obj()
+ return {
+ 	x = 0,
+ 	y = 0,
+ 	vx = 0,
+ 	vy = 0,
+ 	e = 0,
+ }
+end
+
+function _init()
+ obj = phys_obj()
+ obj.x = 20
+ obj.y = 40
+ obj.e = 5
+ 
+ g = get_phys_grid(32,32)
+end
+
+function _update()
+	g.reset_grid()
+	if obj.x > 1 and obj.x < 128 then
+  g.add_energy(flr(obj.x/4),flr(obj.y/4), obj.e)
+  local frc = g.get_force_vec(flr(obj.x/4), flr(obj.y/4))
+  obj.vx = frc.x
+  obj.vy = frc.y + 8
+ 	print("∧orking")
+ end
+ 
+ g.update()
+
+	obj.x += obj.vx
+	obj.y += obj.vy
+
+end
+
+function _draw()
+ cls()
+ circfill(obj.x, obj.y, obj.e, 5)
+end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
