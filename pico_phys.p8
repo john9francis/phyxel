@@ -102,6 +102,9 @@ function get_phys_grid(x,y)
      local j_final = j+1
      
      -- let's do periodic boundaries
+     -- alternatives: ignore boundaries (skip)
+     -- or set boundaries with border
+ 
      if i==1 then i_init = #gradient_grid end
      if i==#gradient_grid then i_final = 1 end
      if j==1 then j_init = #gradient_grid end
