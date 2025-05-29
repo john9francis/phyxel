@@ -71,6 +71,19 @@ function get_phys_grid(x,y)
    energy_grid[y][x] += e
   end,
   
+  -- todo: get_force function
+  -- will return the gradient
+  -- at the requested x,y coord
+  get_force_vec = function(x,y)
+   -- note: returns a vec2
+   -- which can be accessed via
+   -- vec2.x and vec2.y
+   
+   -- also: convention:
+   -- positive = down and right
+   return gradient_grid[x][y]
+  end,
+  
   print_grids = function()
    print("energy grid:")
    for i=1,#energy_grid do
@@ -124,6 +137,8 @@ end
 pg = get_phys_grid(3, 3)
 pg.add_energy(1,2,3)
 pg.update()
+frc_vec = pg.get_force_vec(2,2)
+print("frc: ("..frc_vec.x..","..frc_vec.y..")", 10, 100)
 pg.print_grids()
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
