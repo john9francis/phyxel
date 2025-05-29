@@ -63,7 +63,12 @@ function get_phys_grid(x,y)
   gradient_grid = gradient_grid,
     
   add_energy = function(x,y,e)
-   energy_grid[x][y] += e
+  	-- note: in the table, first
+  	-- index is for column,
+  	-- second is row. that's why
+  	-- we reverse it, because
+  	-- our convention is row,col
+   energy_grid[y][x] += e
   end,
   
   print_grids = function()
@@ -96,10 +101,11 @@ function get_phys_grid(x,y)
      local j_init = j-1
      local j_final = j+1
      
-     if i==1 then i_init = i end
-     if i==#gradient_grid then i_final = i end
-     if j==1 then j_init = j end
-     if j==#gradient_grid[i] then j_final = j end
+     -- let's do periodic boundaries
+     if i==1 then i_init = #gradient_grid end
+     if i==#gradient_grid then i_final = 1 end
+     if j==1 then j_init = #gradient_grid end
+     if j==#gradient_grid[i] then j_final = 1 end
      
      diffx = energy_grid[i_final][j] - energy_grid[i_init][j] 
   		 diffy = energy_grid[i][j_final] - energy_grid[i][j_init]
